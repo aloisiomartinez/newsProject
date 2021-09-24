@@ -7,7 +7,6 @@ import {
 
 import { v4 as uuidv4 } from "uuid";
 
-
 @Entity("author")
 class Author {
   @PrimaryColumn()
@@ -16,6 +15,9 @@ class Author {
   @Column()
   name: string;
 
+  @Column()
+  email: string;
+  
   @CreateDateColumn()
   created_at: Date;
 
