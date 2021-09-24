@@ -1,14 +1,13 @@
 import "reflect-metadata";
+import "express-async-errors";
 import cors from "cors";
 import express, { Request, Response, NextFunction } from "express";
-import "express-async-errors";
 
+import "../typeorm/index";
 import { AppError } from "../../errors/AppError";
-// import createConnection from "@shared/infra/typeorm";
 
 import { router } from "./routes";
 
-// createConnection();
 const app = express();
 
 app.use(cors());
