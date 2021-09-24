@@ -8,13 +8,16 @@ import {
 } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 
+import { Report } from "@modules/reports/infra/typeorm/entities/Report";
+
+
 @Entity("author")
 class Author {
   @PrimaryColumn()
   id: string;
 
   @ManyToOne(() => Report)
-  @JoinColumn({ name: "car_id" })
+  @JoinColumn({ name: "report_id" })
   report: Report;
 
   @Column()
@@ -22,9 +25,6 @@ class Author {
 
   @Column()
   name: string;
-
-  @Column()
-  start_date: Date;
 
   @CreateDateColumn()
   created_at: Date;

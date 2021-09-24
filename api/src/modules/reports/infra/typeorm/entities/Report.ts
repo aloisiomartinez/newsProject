@@ -8,16 +8,16 @@ import {
 } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 
-import { User } from "@modules/users/infra/typeorm/entities/Author";
+import { Author } from "@modules/authors/infra/typeorm/entities/Author";
 
 @Entity("report")
 class Report {
   @PrimaryColumn()
   id: string;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => Author)
   @JoinColumn({ name: "author_id" })
-  author: User;
+  author: Author;
 
   @Column()
   author_id: string;
