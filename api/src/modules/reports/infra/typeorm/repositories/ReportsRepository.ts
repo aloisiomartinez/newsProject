@@ -26,6 +26,23 @@ class ReportsRepository implements IReportsRepository {
 
     return report;
   }
+
+  async findById(id: string): Promise<Report> {
+    return await this.repository.findOne(id);
+  }
+
+  async update(id: string, title: string, description: string): Promise<Report> {
+    const report = await this.repository.findOne({ id });
+
+		await this.repository
+			.createQueryBuilder()
+			.update(report)
+			.set({ title, description})
+			.where("id = :id", { id })
+			.execute();
+
+		return report;
+  }
 }
 
 export { ReportsRepository };

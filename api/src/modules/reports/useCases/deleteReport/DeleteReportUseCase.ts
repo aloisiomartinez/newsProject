@@ -11,13 +11,14 @@ import { AuthorsRepository } from "@modules/authors/infra/typeorm/repositories/A
 import { ReportsRepository } from "@modules/reports/infra/typeorm/repositories/ReportsRepository";
 
 interface IRequest {
+  report_id: string;
   author_name: string;
   title: string;
   description: string;
 }
 
 @injectable()
-class CreateReportUseCase {
+class EditReportUseCase {
   constructor(
     // @inject("AuthorsRepository")
     // private authorsRepository: IAuthorsRepository,
@@ -26,6 +27,7 @@ class CreateReportUseCase {
   ) {}
 
   async execute({
+    report_id,
     author_name,
     title,
     description,
@@ -33,20 +35,27 @@ class CreateReportUseCase {
     const authorsRepository = new AuthorsRepository();
     const reportsRepository = new ReportsRepository();
 
-    const author: Author = await authorsRepository.create(
+    const findReport = await reportsRepository.findById(report_id);
+
+    if(!findReport) {
+      throw new AppError("Report not found!", 404);
+    }
+
+    const author: Author = await authorsRepository.findByName(
       author_name
     );
-   
 
-    const report = await reportsRepository.create(
-      author.id,
+    if(!author) {
+      throw new AppError("Author not found!", 404);
+    }
+   
+    return await reportsRepository.update(
+      report_id,
       title,
       description,
     );
 
-    return report
-
   }
 }
 
-export { CreateReportUseCase };
+export { EditReportUseCase };
