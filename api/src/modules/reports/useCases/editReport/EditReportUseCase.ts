@@ -7,8 +7,6 @@ import { Author } from "@modules/authors/infra/typeorm/entities/Author";
 import { IReportsRepository } from "@modules/reports/repositories/IReportsRepository";
 
 import { AppError } from "@shared/errors/AppError";
-import { AuthorsRepository } from "@modules/authors/infra/typeorm/repositories/AuthorsRepository";
-import { ReportsRepository } from "@modules/reports/infra/typeorm/repositories/ReportsRepository";
 
 interface IRequest {
   report_id: string;
