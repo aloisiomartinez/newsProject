@@ -12,8 +12,7 @@ class EditReportController {
       description,
     } = request.body;
 
-    //const createReportUseCase = container.resolve(CreateReportUseCase);
-    const editReportUseCase = new EditReportUseCase()
+    const editReportUseCase = container.resolve(EditReportUseCase);
     
     const report = await editReportUseCase.execute({
       report_id: id,
@@ -22,7 +21,7 @@ class EditReportController {
       description,
     });
 
-    return response.status(201).json(report);
+    return response.status(201).json({ message: "Updated!", report});
   }
 }
 

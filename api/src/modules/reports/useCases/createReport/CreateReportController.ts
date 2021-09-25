@@ -11,8 +11,7 @@ class CreateReportController {
       description,
     } = request.body;
 
-    //const createReportUseCase = container.resolve(CreateReportUseCase);
-    const createReportUseCase = new CreateReportUseCase()
+    const createReportUseCase = container.resolve(CreateReportUseCase);
     
     const report = await createReportUseCase.execute({
       author_name,

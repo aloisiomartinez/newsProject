@@ -31,17 +31,18 @@ class ReportsRepository implements IReportsRepository {
     return await this.repository.findOne(id);
   }
 
+  async delete(id: string): Promise<void> {
+    await this.repository.delete(id);
+  }
+
   async update(id: string, title: string, description: string): Promise<Report> {
     const report = await this.repository.findOne({ id });
-
-		await this.repository
-			.createQueryBuilder()
-			.update(report)
-			.set({ title, description})
-			.where("id = :id", { id })
-			.execute();
-
-		return report;
+    
+    return this.repository.save({
+      ...report,
+      title,
+      description
+    })
   }
 }
 

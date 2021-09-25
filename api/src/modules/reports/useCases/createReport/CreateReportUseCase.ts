@@ -6,10 +6,6 @@ import { Author } from "@modules/authors/infra/typeorm/entities/Author";
 
 import { IReportsRepository } from "@modules/reports/repositories/IReportsRepository";
 
-import { AppError } from "@shared/errors/AppError";
-import { AuthorsRepository } from "@modules/authors/infra/typeorm/repositories/AuthorsRepository";
-import { ReportsRepository } from "@modules/reports/infra/typeorm/repositories/ReportsRepository";
-
 interface IRequest {
   author_name: string;
   title: string;
@@ -19,10 +15,10 @@ interface IRequest {
 @injectable()
 class CreateReportUseCase {
   constructor(
-    // @inject("AuthorsRepository")
-    // private authorsRepository: IAuthorsRepository,
-    // @inject("ReportsRepository")
-    // private reportsRepository: IReportsRepository
+    @inject("AuthorsRepository")
+    private authorsRepository: IAuthorsRepository,
+    @inject("ReportsRepository")
+    private reportsRepository: IReportsRepository
   ) {}
 
   async execute({
@@ -30,22 +26,17 @@ class CreateReportUseCase {
     title,
     description,
   }: IRequest): Promise<Report> {
-    const authorsRepository = new AuthorsRepository();
-    const reportsRepository = new ReportsRepository();
-
-    const author: Author = await authorsRepository.create(
+    const author: Author = await this.authorsRepository.create(
       author_name
     );
-   
-
-    const report = await reportsRepository.create(
+  
+    const report = await this.reportsRepository.create(
       author.id,
       title,
       description,
     );
 
     return report
-
   }
 }
 

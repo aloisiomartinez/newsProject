@@ -1,28 +1,17 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
-import { EditReportUseCase } from "./EditReportUseCase";
+import { DeleteReportUseCase } from "./DeleteReportUseCase";
 
 class EditReportController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { id } = request.params;
-    const {
-      author_name,
-      title,
-      description,
-    } = request.body;
 
-    //const createReportUseCase = container.resolve(CreateReportUseCase);
-    const editReportUseCase = new EditReportUseCase()
+    const deleteReportUseCase = container.resolve(DeleteReportUseCase);
     
-    const report = await editReportUseCase.execute({
-      report_id: id,
-      author_name,
-      title,
-      description,
-    });
+   await deleteReportUseCase.execute(id)
 
-    return response.status(201).json(report);
+    return response.status(201).json({ message: "Deleted!"});
   }
 }
 

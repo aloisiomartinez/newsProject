@@ -10,52 +10,26 @@ import { AppError } from "@shared/errors/AppError";
 import { AuthorsRepository } from "@modules/authors/infra/typeorm/repositories/AuthorsRepository";
 import { ReportsRepository } from "@modules/reports/infra/typeorm/repositories/ReportsRepository";
 
-interface IRequest {
-  report_id: string;
-  author_name: string;
-  title: string;
-  description: string;
-}
-
 @injectable()
-class EditReportUseCase {
+class DeleteReportUseCase {
   constructor(
-    // @inject("AuthorsRepository")
-    // private authorsRepository: IAuthorsRepository,
-    // @inject("ReportsRepository")
-    // private reportsRepository: IReportsRepository
+    @inject("AuthorsRepository")
+    private authorsRepository: IAuthorsRepository,
+    @inject("ReportsRepository")
+    private reportsRepository: IReportsRepository
   ) {}
 
-  async execute({
-    report_id,
-    author_name,
-    title,
-    description,
-  }: IRequest): Promise<Report> {
-    const authorsRepository = new AuthorsRepository();
-    const reportsRepository = new ReportsRepository();
+  async execute(id: string): Promise<Report> {
+    const findReport = await this.reportsRepository.findById(id);
 
-    const findReport = await reportsRepository.findById(report_id);
-
-    if(!findReport) {
+    if (!findReport) {
       throw new AppError("Report not found!", 404);
     }
 
-    const author: Author = await authorsRepository.findByName(
-      author_name
-    );
+    await this.reportsRepository.delete(id);
 
-    if(!author) {
-      throw new AppError("Author not found!", 404);
-    }
-   
-    return await reportsRepository.update(
-      report_id,
-      title,
-      description,
-    );
-
+    return;
   }
 }
 
-export { EditReportUseCase };
+export { DeleteReportUseCase };

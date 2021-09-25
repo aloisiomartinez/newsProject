@@ -20,10 +20,10 @@ interface IRequest {
 @injectable()
 class EditReportUseCase {
   constructor(
-    // @inject("AuthorsRepository")
-    // private authorsRepository: IAuthorsRepository,
-    // @inject("ReportsRepository")
-    // private reportsRepository: IReportsRepository
+    @inject("AuthorsRepository")
+    private authorsRepository: IAuthorsRepository,
+    @inject("ReportsRepository")
+    private reportsRepository: IReportsRepository
   ) {}
 
   async execute({
@@ -32,16 +32,13 @@ class EditReportUseCase {
     title,
     description,
   }: IRequest): Promise<Report> {
-    const authorsRepository = new AuthorsRepository();
-    const reportsRepository = new ReportsRepository();
-
-    const findReport = await reportsRepository.findById(report_id);
+    const findReport = await this.reportsRepository.findById(report_id);
 
     if(!findReport) {
       throw new AppError("Report not found!", 404);
     }
 
-    const author: Author = await authorsRepository.findByName(
+    const author: Author = await this.authorsRepository.findByName(
       author_name
     );
 
@@ -49,12 +46,11 @@ class EditReportUseCase {
       throw new AppError("Author not found!", 404);
     }
    
-    return await reportsRepository.update(
+    return await this.reportsRepository.update(
       report_id,
       title,
       description,
     );
-
   }
 }
 

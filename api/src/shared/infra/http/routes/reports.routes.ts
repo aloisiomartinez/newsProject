@@ -9,6 +9,6 @@ const editReportController = new EditReportController()
 const reportsRoutes = Router();
 
 reportsRoutes.post("/", createReportController.handle);
-reportsRoutes.put("/", editReportController.handle);
+reportsRoutes.put("/:id", editReportController.handle);
 
 export { reportsRoutes };
