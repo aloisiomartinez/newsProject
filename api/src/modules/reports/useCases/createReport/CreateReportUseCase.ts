@@ -7,6 +7,8 @@ import { Author } from "@modules/authors/infra/typeorm/entities/Author";
 import { IReportsRepository } from "@modules/reports/repositories/IReportsRepository";
 
 import { AppError } from "@shared/errors/AppError";
+import { AuthorsRepository } from "@modules/authors/infra/typeorm/repositories/AuthorsRepository";
+import { ReportsRepository } from "@modules/reports/infra/typeorm/repositories/ReportsRepository";
 
 interface IRequest {
   author_name: string;
@@ -17,10 +19,10 @@ interface IRequest {
 @injectable()
 class CreateReportUseCase {
   constructor(
-    @inject("ReportsRepository")
-    private reportsRepository: IReportsRepository,
-    @inject("AuthorsRepository")
-    private authorsRepository: IAuthorsRepository
+    // @inject("AuthorsRepository")
+    // private authorsRepository: IAuthorsRepository,
+    // @inject("ReportsRepository")
+    // private reportsRepository: IReportsRepository
   ) {}
 
   async execute({
@@ -28,21 +30,23 @@ class CreateReportUseCase {
     title,
     description,
   }: IRequest): Promise<Report> {
-    const author: Author = await this.authorsRepository.findByName(
+    const authorsRepository = new AuthorsRepository();
+    const reportsRepository = new ReportsRepository();
+
+    const author: Author = await authorsRepository.create(
       author_name
     );
+   
 
-    if (!author) {
-      throw new AppError("User does not exists!");
-    }
-
-    const report = await this.reportsRepository.create({
-      user.id,
+    const report = await reportsRepository.create(
+      author.id,
       title,
       description,
-    });
+    );
 
-    return report;
+    return report
+
+    // return report;
   }
 }
 

@@ -3,7 +3,7 @@ import { container } from "tsyringe";
 
 import { CreateReportUseCase } from "./CreateReportUseCase";
 
-class CreateCarController {
+class CreateReportController {
   async handle(request: Request, response: Response): Promise<Response> {
     const {
       author_name,
@@ -11,16 +11,17 @@ class CreateCarController {
       description,
     } = request.body;
 
-    const createReportUseCase = container.resolve(CreateReportUseCase);
-
+    //const createReportUseCase = container.resolve(CreateReportUseCase);
+    const createReportUseCase = new CreateReportUseCase()
+    
     const report = await createReportUseCase.execute({
       author_name,
       title,
       description,
     });
 
-    return response.status(201).json(car);
+    return response.status(201).json(report);
   }
 }
 
-export { CreateCarController };
+export { CreateReportController };
