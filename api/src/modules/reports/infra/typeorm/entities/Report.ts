@@ -26,7 +26,7 @@ class Report {
   title: string;
 
   @Column()
-  description: Date;
+  description: string;
 
   @CreateDateColumn()
   created_at: Date;

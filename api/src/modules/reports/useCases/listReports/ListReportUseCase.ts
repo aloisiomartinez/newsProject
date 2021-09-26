@@ -6,14 +6,11 @@ import { Author } from "@modules/authors/infra/typeorm/entities/Author";
 
 import { IReportsRepository } from "@modules/reports/repositories/IReportsRepository";
 
-interface IRequest {
-  author_name: string;
-  title: string;
-  description: string;
-}
+import { AppError } from "@shared/errors/AppError";
+
 
 @injectable()
-class CreateReportUseCase {
+class ListReportUseCase {
   constructor(
     @inject("AuthorsRepository")
     private authorsRepository: IAuthorsRepository,
@@ -21,23 +18,15 @@ class CreateReportUseCase {
     private reportsRepository: IReportsRepository
   ) {}
 
-  async execute({
-    author_name,
-    title,
-    description,
-  }: IRequest): Promise<Report> {
-    const author: Author = await this.authorsRepository.create(
-      author_name
-    );
-  
-    const report = await this.reportsRepository.create(
-      author.id,
-      title,
-      description
-    );
+  async execute(): Promise<Report[]> {
+    const reports = await this.reportsRepository.getAllReports();
+   
+    if(!reports) {
+      throw new AppError("No report found!", 404);
+    }
 
-    return report
+    return reports;
   }
 }
 
-export { CreateReportUseCase };
+export { ListReportUseCase };

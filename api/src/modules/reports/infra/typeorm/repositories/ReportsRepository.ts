@@ -16,12 +16,13 @@ class ReportsRepository implements IReportsRepository {
     title: string,
     description: string
   ): Promise<Report> {
+    console.log(description)
     const report = this.repository.create({
       author_id,
       title,
       description
     });
-
+    console.log(report)
     await this.repository.save(report);
 
     return report;
@@ -33,6 +34,10 @@ class ReportsRepository implements IReportsRepository {
 
   async delete(id: string): Promise<void> {
     await this.repository.delete(id);
+  }
+
+  async getAllReports(): Promise<Report[]> {
+    return await this.repository.find()
   }
 
   async update(id: string, title: string, description: string): Promise<Report> {
