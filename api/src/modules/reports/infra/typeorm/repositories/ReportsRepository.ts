@@ -1,4 +1,4 @@
-import { getRepository, Repository } from "typeorm";
+import { getRepository, Repository, getManager } from "typeorm";
 
 import { IReportsRepository } from "@modules/reports/repositories/IReportsRepository";
 
@@ -16,13 +16,12 @@ class ReportsRepository implements IReportsRepository {
     title: string,
     description: string
   ): Promise<Report> {
-    console.log(description)
     const report = this.repository.create({
       author_id,
       title,
       description
     });
-    console.log(report)
+
     await this.repository.save(report);
 
     return report;
@@ -37,7 +36,15 @@ class ReportsRepository implements IReportsRepository {
   }
 
   async getAllReports(): Promise<Report[]> {
-    return await this.repository.find()
+    const getClient = getManager();
+
+		return await getClient.query(
+			`SELECT * 
+			FROM author
+			INNER JOIN report
+      on author.id = report.author_id
+			`,
+		);
   }
 
   async update(id: string, title: string, description: string): Promise<Report> {

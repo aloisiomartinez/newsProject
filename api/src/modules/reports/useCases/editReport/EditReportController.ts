@@ -5,6 +5,7 @@ import { EditReportUseCase } from "./EditReportUseCase";
 
 class EditReportController {
   async handle(request: Request, response: Response): Promise<Response> {
+
     const { id } = request.params;
     const {
       author_name,

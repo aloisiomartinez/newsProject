@@ -18,7 +18,6 @@ class DeleteReportUseCase {
 
   async execute(id: string): Promise<Report> {
     const findReport = await this.reportsRepository.findById(id);
-
     if (!findReport) {
       throw new AppError("Report not found!", 404);
     }

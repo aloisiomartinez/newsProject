@@ -35,14 +35,6 @@ class EditReportUseCase {
     if(!findReport) {
       throw new AppError("Report not found!", 404);
     }
-
-    const author: Author = await this.authorsRepository.findByName(
-      author_name
-    );
-
-    if(!author) {
-      throw new AppError("Author not found!", 404);
-    }
    
     return await this.reportsRepository.update(
       report_id,
