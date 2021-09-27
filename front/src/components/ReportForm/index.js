@@ -6,6 +6,7 @@ import useErrors from '../../hooks/userErrors';
 import FormGroup from '../FormGroup';
 import Input from '../Input';
 import Button from '../Button';
+import TextArea from '../TextArea';
 
 import * as S from './styles';
 
@@ -57,7 +58,7 @@ export default function ContactForm({ buttonLabel }) {
       </FormGroup>
 
       <FormGroup error={getErrorMessageByFieldName('description')}>
-        <Input
+        <TextArea
           type="description"
           error={getErrorMessageByFieldName('description')}
           placeholder="Descrição"

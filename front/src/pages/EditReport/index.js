@@ -1,15 +1,15 @@
 import PageHeader from '../../components/PageHeader';
 import ReportForm from '../../components/ReportForm';
 
-export default function NewReport() {
+export default function EditReport() {
   return (
     <>
       <PageHeader
-        title="Nova Notícia"
+        title="Editar Noticia"
       />
 
       <ReportForm
-        buttonLabel="Cadastrar"
+        buttonLabel="Salvar alterações"
       />
     </>
   );
