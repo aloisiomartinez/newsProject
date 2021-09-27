@@ -14,7 +14,7 @@ export default function Home() {
       </S.InputSearchContainer>
 
       <S.Header>
-        <strong>3 Contatos</strong>
+        <strong>3 Notícias</strong>
         <Link to="/new">Cadastrar Notícia</Link>
       </S.Header>
 
@@ -32,6 +32,8 @@ export default function Home() {
               <strong>João VitorJoão VitorJoão Vitor</strong>
               <small>João Vitor</small>
             </div>
+            <small>Autor: Joao</small>
+
           </div>
 
           <div className="actions">
