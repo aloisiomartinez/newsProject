@@ -1,7 +1,6 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
-
-import useErrors from '../../hooks/userErrors';
 
 import FormGroup from '../FormGroup';
 import Input from '../Input';
@@ -14,24 +13,12 @@ export default function ContactForm({ buttonLabel }) {
   const [report, setReport] = useState('');
   const [description, setDescription] = useState('');
   const [author, setAuthor] = useState('');
+  const { id } = useParams();
 
-  const {
-    errors,
-    setError,
-    removeError,
-    getErrorMessageByFieldName,
-  } = useErrors();
-
-  const isFormValid = report && !errors.length;
+  const isFormValid = report;
 
   function handleReportChange(event) {
     setReport(event.target.value);
-
-    if (!event.target.value) {
-      setError({ field: 'report', message: 'Titulo é obrigatório.' });
-    } else {
-      removeError('report');
-    }
   }
 
   function handleDescriptionChange(event) {
@@ -42,25 +29,46 @@ export default function ContactForm({ buttonLabel }) {
     setAuthor((event.target.value));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+
+    // eslint-disable-next-line eqeqeq
+    if (window.location.href.includes('new')) {
+      await fetch('http://localhost:3333/reports', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          description,
+          title: report,
+          author_name: author,
+        }),
+      });
+    } else {
+      await fetch(`http://localhost:3333/reports/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          description,
+          title: report,
+          author_name: author,
+        }),
+      });
+    }
   }
 
   return (
     <S.Form onSubmit={handleSubmit} noValidate>
-      <FormGroup error={getErrorMessageByFieldName('report')}>
+      <FormGroup>
         <Input
-          error={getErrorMessageByFieldName('report')}
           placeholder="Título da Notícia"
           value={report}
           onChange={handleReportChange}
         />
       </FormGroup>
 
-      <FormGroup error={getErrorMessageByFieldName('description')}>
+      <FormGroup>
         <TextArea
           type="description"
-          error={getErrorMessageByFieldName('description')}
           placeholder="Descrição"
           value={description}
           onChange={handleDescriptionChange}
